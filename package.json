@@ -14,5 +14,12 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "flow": "flow"
+  },
+  "proxy": {
+    "/api": {
+      "pathRewrite": {"^/api/radius/v1": ""},
+      "target": "http://localhost:4545",
+      "ws": true
+    }
   }
 }
