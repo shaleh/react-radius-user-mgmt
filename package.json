@@ -3,21 +3,29 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "flow-bin": "^0.56.0",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-scripts": "1.0.14"
   },
+  "devDependencies": {
+    "eslint": "^4.8.0",
+    "eslint-plugin-react": "^7.4.0",
+    "flow-bin": "^0.56.0",
+    "stylelint": "^8.1.1",
+    "stylelint-config-standard": "^17.0.0"
+  },
   "scripts": {
-    "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "flow": "flow"
+    "flow": "flow",
+    "start": "react-scripts start",
+    "test": "react-scripts test --env=jsdom"
   },
   "proxy": {
     "/api": {
-      "pathRewrite": {"^/api/radius/v1": ""},
+      "pathRewrite": {
+        "^/api/radius/v1": ""
+      },
       "target": "http://localhost:4545",
       "ws": true
     }
