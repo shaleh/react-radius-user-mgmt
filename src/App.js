@@ -1,9 +1,13 @@
-import React, { Component } from 'react';
+// @flow
+
+import { Component } from 'react';
 import './App.css';
 
-const RADIUS_API_BASE = '/api/radius/v1'
+const RADIUS_API_BASE = '/api/radius/v1';
 
-class App extends Component {
+type AppProps = {};
+
+class App extends Component<AppProps> {
     render() {
         return (
             <div className="App">
@@ -17,25 +21,29 @@ class App extends Component {
 
 export default App;
 
-function fetchUsers(cb) {
+function fetchUsers() {
     fetch(RADIUS_API_BASE + '/users/').then(checkStatus)
-                                      .then(parseJSON)
-                                      .then(cb);
+                                      .then(parseJSON);  // eslint-disable-line indent
 }
 
-class UserList extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            users: null
-        }
-    }
+type UserListProps = {};
+
+type UserListState = {
+    users: Array<Object>,
+};
+
+// eslint-disable-next-line no-unused-vars
+class UserList extends Component<UserListProps, UserListState> {
+    state = {
+        users: []
+    };
+    timerID = null;
 
     render() {
-        if (! this.state.users) { return null }
+        if (! this.state.users) { return null; }
 
         const users = this.state.users.map(user => {
-            const action = actionForUser(user)
+            const action = actionForUser(user);
             const buttonClass = user.disabled ? 'userDisabled' : 'userActive';
             return (
                 <li key={user.name}>
@@ -50,11 +58,11 @@ class UserList extends Component {
     }
 
     updateUser(action) {
-        fetch(action.url, {
-            accept: "application/json",
-            method: "PUT"
-        }).then(checkStatus)
-        this.tick()
+        fetch(action, {
+            accept: 'application/json',
+            method: 'PUT'
+        }).then(checkStatus);
+        this.tick();
     }
 
     componentDidMount() {
@@ -66,11 +74,13 @@ class UserList extends Component {
     }
 
     componentWillUnmount() {
-        clearInterval(this.timerID);
+        if (this.timerID) {
+            clearInterval(this.timerID);
+        }
     }
 
     tick() {
-        fetchUsers(users => {
+        fetchUsers().then(users => {
             this.setState({
                 users: users
             });
@@ -79,11 +89,9 @@ class UserList extends Component {
 }
 
 function actionForUser(user) {
-    if (user.disabled) {
-        return {url: RADIUS_API_BASE + '/users/' + user.name + '/reactivate', blurb: 'Enable'}
-    }
+    const action = user.disabled ? 'reactivate' : 'disable';
 
-    return {url: RADIUS_API_BASE + '/users/' + user.name + '/disable', blurb: 'Disable'}
+    return RADIUS_API_BASE + '/users/' + user.name + '/' + action.endpoint;
 }
 
 function checkStatus(response) {
@@ -91,8 +99,6 @@ function checkStatus(response) {
         return response;
     }
     const error = new Error(`HTTP Error ${response.statusText}`);
-    error.status = response.statusText;
-    error.response = response;
     console.log(error); // eslint-disable-line no-console
     throw error;
 }
