@@ -1,0 +1,21 @@
+ul {
+  list-style-type: none;
+}
+
+button.user {
+  width: 128px;
+  height: 64px;
+  font-size: 24px;
+}
+
+button.userActive {
+  background-color: white;
+  border: 2px solid #0f0; /* Green */
+  color: black;
+}
+
+button.userDisabled {
+  background-color: white;
+  border: 2px solid #f00; /* Red */
+  color: black;
+}

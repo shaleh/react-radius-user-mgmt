@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { checkStatus, parseJSON } from './Util';
+import './User.css';
 
 const RADIUS_API_BASE = '/api/radius/v1';
 
@@ -22,7 +23,7 @@ class UserList extends Component<UserListProps, UserListState> {
             const info = infoForUser(user);
             return (
                 <li key={user.name}>
-                    <button class={'user' + info.label} onClick={() => this.updateUser(info.action)}>
+                    <button class={'user user' + info.label} onClick={() => this.updateUser(info.action)}>
                         {user.name}
                     </button>
                 </li>
