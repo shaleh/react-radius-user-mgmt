@@ -6,9 +6,9 @@ To install this you also need my [go-radius-rest](https://github.com/shaleh/go-r
 micro-service. Of course, if you implement the really
 simple REST endpoints below you can run this against your own backend.
 
-> GET /users expects a list of users that have a `name` and a `disabled` boolean.
-> PUT /users/<name>/disable will disable a user in RADIUS
-> PUT /users/<name>/reactivate will reactivate a user in RADIUS
+    GET /users expects a list of users that have a `name` and a `disabled` boolean.
+    PUT /users/<name>/disable will disable a user in RADIUS
+    PUT /users/<name>/reactivate will reactivate a user in RADIUS
 
 That is it. Yes, it is disable/reactivate not disable/enable. This was done to
 prevent accidental calls.
