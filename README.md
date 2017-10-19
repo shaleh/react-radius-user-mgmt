@@ -3,15 +3,8 @@
 A really simple front end to an equally simple RADIUS user management service.
 
 To install this you also need my [go-radius-rest](https://github.com/shaleh/go-radius-rest)
-micro-service. Of course, if you implement the really
-simple REST endpoints below you can run this against your own backend.
-
-    GET /users expects a list of users that have a `name` and a `disabled` boolean.
-    PUT /users/<name>/disable will disable a user in RADIUS
-    PUT /users/<name>/reactivate will reactivate a user in RADIUS
-
-That is it. Yes, it is disable/reactivate not disable/enable. This was done to
-prevent accidental calls.
+micro-service. Of course, if you implement the really simple REST endpoints
+you can run this against your own backend.
 
 The JS UI is a list of users from RADIUS. Each user is a
 button. If the user is deactivated their button will be red if active
