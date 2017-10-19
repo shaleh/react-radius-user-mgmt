@@ -1,29 +1,41 @@
+// @flow
 import React, { Component } from 'react';
 import { checkStatus, parseJSON } from './Util';
 import './User.css';
 
 const RADIUS_API_BASE = '/api/radius/v1';
 
+type User = {
+    disabled: boolean,
+    name: string,
+}
+
 type UserListProps = {};
 
 type UserListState = {
+    frequency: number,
     users: Array<Object>,
 };
 
 class UserList extends Component<UserListProps, UserListState> {
     state = {
+        frequency: 60 * 1000, // once a minute
         users: []
     };
-    timerID = null;
+    timerID = null;  // used for automatic UI updates
 
     render() {
-        if (! this.state.users) { return null; }
+        if (! (this.state.users && this.state.users.length)) {
+            return (
+                <div className='noUsers'>No users found</div>
+            );
+        }
 
         const output = this.state.users.map(user => {
             const info = infoForUser(user);
             return (
                 <li key={user.name}>
-                    <button class={'user user' + info.label} onClick={() => this.updateUser(info.action)}>
+                    <button className={'user user' + info.label} onClick={() => this.updateUser(info.action)}>
                         {user.name}
                     </button>
                 </li>
@@ -35,18 +47,18 @@ class UserList extends Component<UserListProps, UserListState> {
         );
     }
 
-    updateUser(action) {
+    updateUser(action: string) {
         fetch(action, {
             accept: 'application/json',
             method: 'PUT'
-        }).then(checkStatus);
-        this.tick();
+        }).then(checkStatus);  // there is nothing useful in the response
+        this.tick();  // force an update to show the user's new state
     }
 
     componentDidMount() {
         this.timerID = setInterval(
             () => this.tick(),
-            60 * 1000
+            this.state.frequency
         );
         this.tick();
     }
@@ -67,11 +79,11 @@ class UserList extends Component<UserListProps, UserListState> {
 }
 
 function fetchUsers() {
-    return fetch(RADIUS_API_BASE + '/users/').then(checkStatus)
+    return fetch(RADIUS_API_BASE + '/users/').then(checkStatus) // FIXME: figure out the eslint option
                                              .then(parseJSON);  // eslint-disable-line indent
 }
 
-function infoForUser(user) {
+function infoForUser(user: User) {
     var action = '';
     var label = '';
     if (user.disabled) {
@@ -88,4 +100,5 @@ function infoForUser(user) {
     };
 }
 
+// other than UserList, these are exported for ease of testing
 export { UserList, infoForUser, RADIUS_API_BASE };
